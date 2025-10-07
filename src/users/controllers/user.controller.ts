@@ -11,7 +11,10 @@ import { UserService } from '../services/user.service';
 import { User } from '../user.entity';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { Serialize } from 'src/decorator/serialize.decorator';
+import { UserResponseDTO } from '../dtos/user-response.dto';
 
+@Serialize(UserResponseDTO)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
