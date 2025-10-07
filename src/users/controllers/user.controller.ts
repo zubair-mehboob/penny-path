@@ -8,7 +8,6 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { User } from '../user.entity';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { Serialize } from 'src/decorator/serialize.decorator';

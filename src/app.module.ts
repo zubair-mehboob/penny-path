@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -23,7 +24,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         };
       },
     }),
-
+    JwtModule.registerAsync({
+      global: true,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('JWT_SECRENT'),
+      }),
+    }),
     UserModule,
   ],
   controllers: [],
