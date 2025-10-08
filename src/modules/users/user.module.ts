@@ -7,9 +7,10 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/common/guard/auth.guard';
+import { AccountModule } from '../accounts/account.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), AccountModule],
   controllers: [UserController, AuthController],
   providers: [
     UserService,

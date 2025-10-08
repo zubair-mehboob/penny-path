@@ -10,12 +10,15 @@ import { User } from '../user.entity';
 import { SigninDTO } from '../dtos/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
+import { Account } from 'src/modules/accounts/account.entity';
+import { AccountService } from 'src/modules/accounts/services/account.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private accountService: AccountService,
   ) {}
   async signin(payload: SigninDTO): Promise<AuthResponseDTO> {
     const existingUser = await this.userService.findOneBy(
@@ -46,7 +49,22 @@ export class AuthService {
     if (existingUser) throw new BadRequestException('user already exist');
     const hash = await this.hashPassword(payload.password);
     payload.password = hash;
-    const user = await this.userService.create(payload);
+
+    const user = await this.userService.create({ ...payload });
+    // 3️⃣ Create default account for user
+    await this.accountService.create({
+      id: 0,
+      balance: 0,
+      budgets: [],
+      user,
+      expenses: [],
+      isDefault: true,
+      name: 'Salary',
+      savingHistory: [],
+      cycleStartDay: 24,
+      cycleEndDay: 23,
+      createdAt: new Date(),
+    });
     const jwtPayload = {
       sub: user.userId,
       username: user.name,
