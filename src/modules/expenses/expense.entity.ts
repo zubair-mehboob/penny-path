@@ -13,8 +13,8 @@ import { Budget } from '../budgets/budget.entity';
 
 @Entity('expenses')
 export class Expense {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;
@@ -48,7 +48,7 @@ export class Expense {
   })
   budget: Budget;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   date: Date;
 
   @Column({ nullable: true })

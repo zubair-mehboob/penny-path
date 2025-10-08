@@ -1,11 +1,15 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { UserController } from './users/controllers/user.controller';
 import { UserModule } from './users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from '../common/entities';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AccountModule } from './accounts/account.module';
+import { ExpenseModule } from './expenses/expense.module';
+import { CategoryModule } from './categories/category.module';
+import { BudgetModule } from './budgets/budget.module';
+import { SavingHistoryModule } from './saving-history/saving-history.module';
 
 @Module({
   imports: [
@@ -29,10 +33,15 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: '120s' },
+        signOptions: { expiresIn: config.get('JWT_TOKEN_EXPIRES_IN') },
       }),
     }),
     UserModule,
+    AccountModule,
+    ExpenseModule,
+    CategoryModule,
+    BudgetModule,
+    SavingHistoryModule,
   ],
   controllers: [],
   providers: [
