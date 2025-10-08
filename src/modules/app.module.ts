@@ -2,7 +2,7 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { UserController } from './users/controllers/user.controller';
 import { UserModule } from './users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from './entities';
+import { entities } from '../common/entities';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -28,7 +28,8 @@ import { JwtModule } from '@nestjs/jwt';
       global: true,
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRENT'),
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: '120s' },
       }),
     }),
     UserModule,

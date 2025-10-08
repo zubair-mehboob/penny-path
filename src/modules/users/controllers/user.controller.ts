@@ -6,17 +6,20 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-import { Serialize } from 'src/decorator/serialize.decorator';
+import { Serialize } from 'src/common/decorator/serialize.decorator';
 import { UserResponseDTO } from '../dtos/user-response.dto';
+import { AuthGuard } from 'src/common/guard/auth.guard';
 
 @Serialize(UserResponseDTO)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  @UseGuards(AuthGuard)
   @Get()
   getUsers() {
     return this.userService.findAll();

@@ -2,8 +2,10 @@ import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { SigninDTO } from '../dtos/sign-in.dto';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { AuthService } from '../services/auth.service';
-import { Serialize } from 'src/decorator/serialize.decorator';
+import { Serialize } from 'src/common/decorator/serialize.decorator';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
+import { Public } from 'src/common/decorator/public.decorator';
+@Public()
 @Serialize(AuthResponseDTO)
 @Controller('auth')
 export class AuthController {
