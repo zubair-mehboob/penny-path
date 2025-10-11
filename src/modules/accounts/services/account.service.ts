@@ -54,4 +54,8 @@ export class AccountService {
       .getRawMany(); // 👈 important — use raw results here
     return result;
   }
+
+  async findOneById(accountId: number) {
+    return await this.accountRepository.findOneBy({ accountId });
+  }
 }
