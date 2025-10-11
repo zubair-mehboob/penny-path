@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from '../../common/entities/user.entity';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { APP_GUARD } from '@nestjs/core';

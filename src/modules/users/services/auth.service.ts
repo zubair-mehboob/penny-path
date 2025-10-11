@@ -6,11 +6,11 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { User } from '../user.entity';
+import { User } from '../../../common/entities/user.entity';
 import { SigninDTO } from '../dtos/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
-import { Account } from 'src/modules/accounts/account.entity';
+
 import { AccountService } from 'src/modules/accounts/services/account.service';
 
 @Injectable()
@@ -51,20 +51,7 @@ export class AuthService {
     payload.password = hash;
 
     const user = await this.userService.create({ ...payload });
-    // 3️⃣ Create default account for user
-    await this.accountService.create({
-      id: 0,
-      balance: 0,
-      budgets: [],
-      user,
-      expenses: [],
-      isDefault: true,
-      name: 'Salary',
-      savingHistory: [],
-      cycleStartDay: 24,
-      cycleEndDay: 23,
-      createdAt: new Date(),
-    });
+
     const jwtPayload = {
       sub: user.userId,
       username: user.name,

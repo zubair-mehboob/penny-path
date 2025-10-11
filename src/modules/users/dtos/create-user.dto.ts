@@ -1,5 +1,5 @@
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
-import { User } from '../user.entity';
+import { User } from '../../../common/entities/user.entity';
 
 export class CreateUserDTO {
   @IsString()

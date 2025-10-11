@@ -7,12 +7,8 @@ export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
   @Get('/:accountId')
-  getAll(@Param('accountId') accountId: number) {
-    return this.expenseService.getExpensesByAccount(accountId);
-  }
+  getAll(@Param('accountId') accountId: number) {}
 
   @Post()
-  create(@Body() dto: CreateExpenseDTO) {
-    return this.expenseService.createExpense(dto);
-  }
+  create(@Body() dto: CreateExpenseDTO) {}
 }
