@@ -4,14 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDTO } from '../dtos/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { User } from '../../../common/entities/user.entity';
-import { SigninDTO } from '../dtos/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResponseDTO } from '../dtos/auth-response.dto';
-
 import { AccountService } from 'src/modules/accounts/services/account.service';
+import { CreateUserDTO } from 'src/common/dtos/request/user.dto';
+import { SigninDTO } from 'src/common/dtos/request/auth.dto';
+import { AuthResponseDTO } from 'src/common/dtos/response/auth.dto';
 
 @Injectable()
 export class AuthService {

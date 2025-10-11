@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../../common/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDTO } from '../dtos/create-user.dto';
+import { CreateUserDTO } from 'src/common/dtos/request/user.dto';
 
 @Injectable()
 export class UserService {
@@ -10,7 +10,12 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    const results = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.accounts', 'accounts')
+      .getMany();
+    console.log({ results });
+    return results;
   }
 
   async findOneBy(key: keyof Omit<User, 'password'>, value: any) {

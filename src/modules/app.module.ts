@@ -47,7 +47,12 @@ import { SavingHistoryModule } from './saving-history/saving-history.module';
   providers: [
     {
       provide: APP_PIPE,
-      useClass: ValidationPipe,
+      useFactory: () => {
+        return new ValidationPipe({
+          whitelist: true,
+          transform: true,
+        });
+      },
     },
   ],
 })

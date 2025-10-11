@@ -6,10 +6,14 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   accountId: number;
+
+  @Column()
+  title: string;
 
   @Column({ type: 'decimal', default: 0, precision: 10, scale: 2 })
   openingBalance: number;

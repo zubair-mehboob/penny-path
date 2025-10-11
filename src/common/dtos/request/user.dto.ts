@@ -11,3 +11,5 @@ export class CreateUserDTO {
   @MaxLength(5)
   password: string;
 }
+
+export class UpdateUserDto implements Partial<CreateUserDTO> {}
