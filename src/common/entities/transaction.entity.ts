@@ -12,9 +12,9 @@ import { Account } from './account.entity';
 
 @Entity()
 @Tree('closure-table')
-export class Expense {
+export class Transaction {
   @PrimaryGeneratedColumn()
-  expenseId: number;
+  transactionId: number;
 
   @Column()
   title: string;
@@ -28,13 +28,13 @@ export class Expense {
   @Column()
   amount: number;
 
-  @ManyToOne(() => Account, (account: Account) => account.expenses)
+  @ManyToOne(() => Account, (account: Account) => account.transactions)
   @JoinColumn({ name: 'accountId' })
   account: Account;
 
   @TreeChildren()
-  children: Expense[];
+  children: Transaction[];
 
   @TreeParent()
-  parent: Expense;
+  parent: Transaction;
 }

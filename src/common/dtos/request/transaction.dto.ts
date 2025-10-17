@@ -1,7 +1,6 @@
 import { Type } from 'class-transformer';
 import {
   IsDate,
-  IsDecimal,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -9,10 +8,10 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { Account } from 'src/common/entities/account.entity';
-import { Expense } from 'src/common/entities/expense.entity';
 
-export class CreateExpenseDTO {
+import { Transaction } from 'src/common/entities/transaction.entity';
+
+export class CreateTransactionDTO {
   @IsOptional()
   @IsString()
   description: string;
@@ -28,12 +27,12 @@ export class CreateExpenseDTO {
   accountId: number;
 }
 
-export class UpdateExpenseDTO extends CreateExpenseDTO {
+export class UpdateTransactionDTO extends CreateTransactionDTO {
   @IsInt()
   @Min(1)
   @IsNotEmpty()
   parentId: number;
 
-  @Type(() => Expense)
-  parent: Expense;
+  @Type(() => Transaction)
+  parent: Transaction;
 }

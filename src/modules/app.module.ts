@@ -6,7 +6,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AccountModule } from './accounts/account.module';
-import { ExpenseModule } from './expenses/expense.module';
+import { TransactionModule } from './transactions/transaction.module';
 import { CategoryModule } from './categories/category.module';
 import { BudgetModule } from './budgets/budget.module';
 import { SavingHistoryModule } from './saving-history/saving-history.module';
@@ -38,7 +38,7 @@ import { SavingHistoryModule } from './saving-history/saving-history.module';
     }),
     UserModule,
     AccountModule,
-    ExpenseModule,
+    TransactionModule,
     CategoryModule,
     BudgetModule,
     SavingHistoryModule,

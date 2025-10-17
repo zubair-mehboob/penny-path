@@ -7,7 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { Expense } from './expense.entity';
+import { Transaction } from './transaction.entity';
+import { RecurringTransaction } from './recurring-transaction.entity';
 
 @Entity()
 export class Account {
@@ -18,10 +19,7 @@ export class Account {
   title: string;
 
   @Column({ type: 'decimal', default: 0, precision: 10, scale: 2 })
-  openingBalance: number;
-
-  @Column({ type: 'decimal', default: 0, precision: 10, scale: 2 })
-  closingBalance: number;
+  balance: number;
 
   @Column({ default: false })
   isDefault: boolean;
@@ -30,6 +28,16 @@ export class Account {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @OneToMany(() => Expense, (expense: Expense) => expense.account)
-  expenses: Expense[];
+  @OneToMany(
+    () => Transaction,
+    (transaction: Transaction) => transaction.account,
+  )
+  transactions: Transaction[];
+
+  @OneToMany(
+    () => RecurringTransaction,
+    (recurringTransaction: RecurringTransaction) =>
+      recurringTransaction.account,
+  )
+  recurringTransactions: RecurringTransaction[];
 }
