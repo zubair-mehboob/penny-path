@@ -45,8 +45,7 @@ export class AccountService {
       .select([
         'account.accountId AS accountId',
         'account.title AS title',
-        'account.openingBalance AS openingBalance',
-        'account.closingBalance AS closingBalance',
+        'account.balance AS balance',
         'account.isDefault AS isDefault',
         'user.userId AS userId', // 👈 alias flatten
       ])
