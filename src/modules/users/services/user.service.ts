@@ -14,7 +14,7 @@ export class UserService {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.accounts', 'accounts')
       .getMany();
-    console.log({ results });
+
     return results;
   }
 
@@ -37,7 +37,7 @@ export class UserService {
     if (!existingUser)
       throw new BadRequestException(`User with id: ${userId} does not exist`);
     Object.assign(existingUser, payload);
-    console.log({ existingUser, payload });
+
     return await this.userRepository.save(existingUser);
   }
 
@@ -46,7 +46,7 @@ export class UserService {
     if (!existingUser)
       throw new BadRequestException(`User with id: ${userId} does not exist`);
     const response = await this.userRepository.delete(existingUser);
-    console.log('delete response', response);
+
     return Boolean(response.affected);
   }
 }

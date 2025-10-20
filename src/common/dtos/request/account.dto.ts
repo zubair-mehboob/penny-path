@@ -19,9 +19,8 @@ export class CreateAccountDTO implements Partial<Account> {
   @MinLength(2)
   title?: string;
   @IsNumber()
-  openingBalance: number;
-  @IsNumber()
-  closingBalance: number;
+  balance: number;
+
   @IsBoolean()
   @IsOptional()
   isDefault: boolean;
@@ -31,10 +30,6 @@ export class CreateAccountDTO implements Partial<Account> {
     @Min(1) → ensures it’s a positive number.
     @IsNotEmpty() → ensures it’s not missing.
    */
-  @IsInt()
-  @Min(1)
-  @IsNotEmpty()
-  userId: number;
 }
 
 export class UpdateAccountDTO extends CreateAccountDTO {

@@ -21,18 +21,30 @@ export class AccountService {
     private readonly userService: UserService,
   ) {}
 
-  async create(dto: CreateAccountDTO): Promise<string> {
-    const user = this.userService.findOneBy('userId', dto.userId);
+  async create(userId: number, dto: CreateAccountDTO): Promise<Account> {
+    const user = this.userService.findOneBy('userId', userId);
     if (!user) throw new BadRequestException('user not found');
     try {
-      await this.accountRepository
+      if (dto.isDefault) {
+        await this.accountRepository
+          .createQueryBuilder()
+          .update(Account)
+          .set({ isDefault: false })
+          .where('userId = :userId', { userId })
+          .execute();
+      }
+      const result = await this.accountRepository
         .createQueryBuilder()
         .insert()
         .into(Account)
-        .values({ ...dto, user: { userId: dto.userId } })
+        .values({ ...dto, user: { userId } })
         .execute();
-
-      return `Account ${dto.title} has been created successfully`;
+      console.log({ result: result.identifiers[0] });
+      const account = await this.accountRepository.findOne({
+        where: { accountId: result.identifiers[0].accountId },
+        relations: ['user'], // if you need related data
+      });
+      return account;
     } catch (e) {
       throw new BadRequestException(e);
     }
@@ -55,7 +67,11 @@ export class AccountService {
   }
 
   async findOneById(accountId: number) {
-    return await this.accountRepository.findOneBy({ accountId });
+    return await this.accountRepository
+      .createQueryBuilder('account')
+      .leftJoinAndSelect('account.user', 'user') //select user from account as user
+      .where('account.accountId = :accountId', { accountId })
+      .getOne();
   }
 
   async setDefaultAccountById(accountId: number) {
@@ -79,5 +95,14 @@ export class AccountService {
       console.error(e, 'error inside route set default');
       return e;
     }
+  }
+
+  async getDefaultAccountByUserId(userId: number) {
+    return await this.accountRepository
+      .createQueryBuilder('account')
+      .leftJoinAndSelect('account.user', 'user')
+      .where('user.userId = :userId', { userId })
+      .andWhere('account.isDefault = :isDefault', { isDefault: true })
+      .getOne();
   }
 }

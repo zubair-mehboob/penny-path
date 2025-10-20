@@ -31,31 +31,46 @@ export class AuthService {
 
     if (!isCorrectPassword)
       throw new BadRequestException('Invalid credentials');
+    const defaultAccount = await this.accountService.getDefaultAccountByUserId(
+      existingUser.userId,
+    );
     const jwtPayload = {
       sub: existingUser.userId,
       username: existingUser.name,
+      userId: existingUser.userId,
     };
     const jwt = await this.jwtService.signAsync(jwtPayload);
-    return { jwt, ...existingUser };
+    return { jwt, accountId: defaultAccount.accountId, ...existingUser };
   }
 
   async signup(payload: CreateUserDTO): Promise<AuthResponseDTO> {
-    const existingUser = await this.userService.findOneBy(
-      'email',
-      payload.email,
-    );
-    if (existingUser) throw new BadRequestException('user already exist');
-    const hash = await this.hashPassword(payload.password);
-    payload.password = hash;
+    try {
+      const existingUser = await this.userService.findOneBy(
+        'email',
+        payload.email,
+      );
+      if (existingUser) throw new BadRequestException('user already exist');
+      const hash = await this.hashPassword(payload.password);
+      payload.password = hash;
 
-    const user = await this.userService.create({ ...payload });
-
-    const jwtPayload = {
-      sub: user.userId,
-      username: user.name,
-    };
-    const jwt = await this.jwtService.signAsync(jwtPayload);
-    return { jwt, ...user };
+      const user = await this.userService.create({ ...payload });
+      console.log({ user }, 'here user created');
+      const account = await this.accountService.create(user.userId, {
+        title: 'Salary',
+        isDefault: true,
+        balance: 0,
+      });
+      const jwtPayload = {
+        sub: user.userId,
+        username: user.name,
+        userId: user.userId,
+      };
+      const jwt = await this.jwtService.signAsync(jwtPayload);
+      return { jwt, accountId: account.accountId, ...user };
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
   private async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // how strong the hash should be
