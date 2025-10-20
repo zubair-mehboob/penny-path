@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAccountDTO } from 'src/common/dtos/request/account.dto';
 import { Account } from 'src/common/entities/account.entity';
@@ -56,5 +56,28 @@ export class AccountService {
 
   async findOneById(accountId: number) {
     return await this.accountRepository.findOneBy({ accountId });
+  }
+
+  async setDefaultAccountById(accountId: number) {
+    try {
+      const account = await this.accountRepository
+        .createQueryBuilder('account')
+        .leftJoinAndSelect('account.user', 'user')
+        .where('account.accountId = :accountId', { accountId })
+        .getOne();
+      if (!account) throw new NotFoundException('account not found');
+      const userId = account.user.userId;
+      const res = await this.accountRepository
+        .createQueryBuilder()
+        .update(Account)
+        .set({ isDefault: false })
+        .where('userId =:userId', { userId })
+        .execute();
+      account.isDefault = true;
+      return await this.accountRepository.save(account);
+    } catch (e) {
+      console.error(e, 'error inside route set default');
+      return e;
+    }
   }
 }

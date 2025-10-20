@@ -48,7 +48,9 @@ export class TransactionService {
 
   // ✅ Get single Transaction (with children)
   async getTransactionById(transactionId: number) {
-    return await this.transactionRepository.findOneBy({ transactionId });
+    const root = await this.transactionRepository.findOneBy({ transactionId });
+
+    return await this.transactionRepository.findDescendantsTree(root);
   }
 
   // // ✅ Update expense

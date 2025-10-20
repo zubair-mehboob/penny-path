@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AccountService } from '../services/account.service';
 import { CreateAccountDTO } from 'src/common/dtos/request/account.dto';
 import { Authenticated } from 'src/common/decorator/authenticate.decorator';
+import { Serialize } from 'src/common/decorator/serialize.decorator';
+import { AccountResponseDTO } from 'src/common/dtos/response/account.dto';
 @Authenticated()
 @Controller('accounts')
 export class AccountController {
@@ -15,5 +25,10 @@ export class AccountController {
   @Get()
   getAll(@Query('userId') userId: number) {
     return this.accountService.getAll(userId);
+  }
+  @Serialize(AccountResponseDTO)
+  @Patch('/:id/set-default')
+  setDefaultAccount(@Param('id') id: number) {
+    return this.accountService.setDefaultAccountById(id);
   }
 }

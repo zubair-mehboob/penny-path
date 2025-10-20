@@ -8,9 +8,7 @@ export class AccountResponseDTO implements Partial<Account> {
   @Expose()
   title: string;
   @Expose()
-  openingBalance: number;
-  @Expose()
-  closingBalance: number;
+  balance: number;
   @Expose()
   isDefault: boolean;
 }
