@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user.entity';
+import { User } from '../../../common/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDTO } from '../dtos/create-user.dto';
+import { CreateUserDTO } from 'src/common/dtos/request/user.dto';
 
 @Injectable()
 export class UserService {
@@ -10,7 +10,12 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    const results = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.accounts', 'accounts')
+      .getMany();
+
+    return results;
   }
 
   async findOneBy(key: keyof Omit<User, 'password'>, value: any) {
@@ -32,7 +37,7 @@ export class UserService {
     if (!existingUser)
       throw new BadRequestException(`User with id: ${userId} does not exist`);
     Object.assign(existingUser, payload);
-    console.log({ existingUser, payload });
+
     return await this.userRepository.save(existingUser);
   }
 
@@ -41,7 +46,7 @@ export class UserService {
     if (!existingUser)
       throw new BadRequestException(`User with id: ${userId} does not exist`);
     const response = await this.userRepository.delete(existingUser);
-    console.log('delete response', response);
+
     return Boolean(response.affected);
   }
 }

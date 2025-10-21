@@ -9,6 +9,8 @@ export class AuthResponseDTO {
   email: string;
   @Expose()
   jwt: string;
+  @Expose()
+  accountId: number;
   @Exclude()
   password: string;
 }

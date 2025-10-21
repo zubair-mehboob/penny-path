@@ -1,15 +1,13 @@
-import { Budget } from '../../modules/budgets/budget.entity';
-import { Account } from '../../modules/accounts/account.entity';
-import { Expense } from '../../modules/expenses/expense.entity';
-import { Category } from '../../modules/categories/category.entity';
-import { User } from '../../modules/users/user.entity';
-import { SavingHistory } from '../../modules/saving-history/saving-history.entity';
+import { Account } from './account.entity';
+import { RecurringTransaction } from './recurring-transaction.entity';
+import { Transaction } from './transaction.entity';
+import { User } from './user.entity';
+import { AccountSetting } from './account_settings';
 
 export const entities = [
   User,
   Account,
-  Budget,
-  Expense,
-  Category,
-  SavingHistory,
+  Transaction,
+  RecurringTransaction,
+  AccountSetting,
 ];
