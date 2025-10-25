@@ -1,7 +1,16 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TransactionService } from '../services/transaction.service';
 import {
   CreateTransactionDTO,
+  UpdateChildTransactionDTO,
   UpdateTransactionDTO,
 } from 'src/common/dtos/request/transaction.dto';
 
@@ -24,7 +33,23 @@ export class TransactionController {
   }
 
   @Post('add-child-Transaction')
-  addChildTransaction(@Body() dto: UpdateTransactionDTO) {
+  addChildTransaction(@Body() dto: UpdateChildTransactionDTO) {
     return this.transactionService.addChildTransaction(dto);
+  }
+  /**
+   *
+   * Checks
+   *
+   * if a transaction has children then the updated amount cannot be less then the sum of all
+   * children amounts.
+   * if making new child check first how much amount other childs have used only left amount can be used same for update
+   */
+  @Patch('/:id')
+  updateTransaction(
+    @Param('id') id: number,
+    @Body() dto: UpdateTransactionDTO,
+  ) {
+    console.log('reached to server', { id, dto });
+    return this.transactionService.updateTransaction(id, dto);
   }
 }
