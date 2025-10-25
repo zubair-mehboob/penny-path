@@ -27,7 +27,7 @@ export class CreateTransactionDTO {
   accountId: number;
 }
 
-export class UpdateTransactionDTO extends CreateTransactionDTO {
+export class UpdateChildTransactionDTO extends CreateTransactionDTO {
   @IsInt()
   @Min(1)
   @IsNotEmpty()
@@ -36,3 +36,5 @@ export class UpdateTransactionDTO extends CreateTransactionDTO {
   @Type(() => Transaction)
   parent: Transaction;
 }
+
+export interface UpdateTransactionDTO extends Partial<Transaction> {}
